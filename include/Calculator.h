@@ -3,6 +3,7 @@
 #include <QLineEdit>
 
 #include "Button.h"
+#include "Logic.h"
 
 class Calculator : public QWidget
 {
@@ -11,6 +12,9 @@ class Calculator : public QWidget
 public:
     Calculator(QWidget* parent = nullptr);
 
+    double calculate();
+
 private:
     QLineEdit* m_display;
+    Logic* m_logic;
 };

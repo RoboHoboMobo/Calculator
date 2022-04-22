@@ -13,7 +13,8 @@ INCLUDEPATH += $$PWD/include
 SOURCES += \
     main.cpp \
     src/Button.cpp \
-    src/Calculator.cpp
+    src/Calculator.cpp \
+    src/Logic.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -22,4 +23,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     include/Button.h \
-    include/Calculator.h
+    include/Calculator.h \
+    include/Logic.h

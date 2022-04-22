@@ -51,4 +51,11 @@ Calculator::Calculator(QWidget* parent)
     mainLayout->addWidget(digits[0], 5, 1);
 
     setLayout(mainLayout);
+
+    m_logic = new Logic();
+}
+
+double Calculator::calculate()
+{
+
 }
