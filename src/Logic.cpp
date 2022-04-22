@@ -20,18 +20,30 @@ double Logic::getResult() const
 
 void Logic::writeDigit(int digit)
 {
+    if (m_hasDot) {
+        m_currentValue += digit * m_dotDivider;
+        m_dotDivider /= 10.0;
+
+        return;
+    }
+
     m_currentValue = m_currentValue * 10 + digit;
 }
 
 void Logic::writeDot()
 {
+    if (m_hasDot)
+        return;
+
     m_hasDot = true;
+    m_dotDivider = 0.1;
 }
 
 void Logic::writeOperator(Logic::Operator op)
 {
     m_prevValue = m_currentValue;
     m_currentValue = 0.0;
+    m_hasDot = false;
 
     m_prevOperator = m_currentOperator;
     m_currentOperator = op;
@@ -96,4 +108,14 @@ double Logic::calculate()
     }
 
     return m_sum + m_mult;
+}
+
+void Logic::clear()
+{
+    m_prevValue = 0.0;
+    m_currentValue = 0.0;
+    m_sum = 0.0;
+    m_mult = 0.0;
+    m_result = 0.0;
+    m_hasDot = false;
 }

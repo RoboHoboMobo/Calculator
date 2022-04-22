@@ -22,6 +22,7 @@ public:
     void writeDot();
     void writeOperator(Operator);
     double calculate();
+    void clear();
 
 public slots:
 
@@ -34,4 +35,5 @@ private:
     Operator m_prevOperator;
     Operator m_currentOperator;
     bool m_hasDot;
+    double m_dotDivider;
 };
