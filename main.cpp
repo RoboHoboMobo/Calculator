@@ -7,13 +7,14 @@
 
 int main(int argc, char *argv[])
 {
-    // QApplication a(argc, argv);
+    QApplication a(argc, argv);
 
-    // Calculator c;
-    // c.show();
+    Calculator c;
+    c.show();
 
-    // return a.exec();
+    return a.exec();
 
+    /*
     /// TODO: write autotests
     Logic l;
 
@@ -41,4 +42,5 @@ int main(int argc, char *argv[])
     l.writeDigit(5);
     l.writeDigit(0);
     qDebug() << l.calculate();
+    */
 }

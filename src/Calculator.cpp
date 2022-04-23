@@ -57,5 +57,5 @@ Calculator::Calculator(QWidget* parent)
 
 double Calculator::calculate()
 {
-
+    return {};
 }
