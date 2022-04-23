@@ -2,6 +2,8 @@
 
 #include <QObject>
 
+#include <utility>
+
 class Logic : public QObject
 {
     Q_OBJECT
@@ -21,7 +23,7 @@ public:
     void writeDigit(int);
     void writeDot();
     void writeOperator(Operator);
-    double calculate();
+    std::pair<bool, double> calculate();
     void clear();
 
 public slots:

@@ -49,19 +49,23 @@ void Logic::writeOperator(Logic::Operator op)
     m_currentOperator = op;
 }
 
-double Logic::calculate()
+std::pair<bool, double> Logic::calculate()
 {
     if (m_prevOperator == Operator::None) {
         if (m_currentOperator == Operator::None)
-            return m_currentValue;
+            return {true, m_currentValue};
         else if (m_currentOperator == Operator::Plus)
-            return m_sum = m_prevValue + m_currentValue;
+            return {true, m_sum = m_prevValue + m_currentValue};
         else if (m_currentOperator == Operator::Minus)
-            return m_sum = m_prevValue - m_currentValue;
+            return {true, m_sum = m_prevValue - m_currentValue};
         else if (m_currentOperator == Operator::Mult)
-            return m_mult = m_prevValue * m_currentValue;
-        else if (m_currentOperator == Operator::Div)
-            return m_mult = m_prevValue / m_currentValue;
+            return {true, m_mult = m_prevValue * m_currentValue};
+        else if (m_currentOperator == Operator::Div) {
+            if (m_currentValue == 0.0)
+                return {false, 0.0};
+
+            return {true, m_mult = m_prevValue / m_currentValue};
+        }
     }
 
     if (m_prevOperator == Operator::Plus) {
@@ -107,7 +111,7 @@ double Logic::calculate()
             m_mult /= m_currentValue;
     }
 
-    return m_sum + m_mult;
+    return {true, m_sum + m_mult};
 }
 
 void Logic::clear()
