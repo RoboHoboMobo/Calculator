@@ -16,7 +16,19 @@ public:
 
     struct Frame
     {
+        Frame();
+        Frame(double currentValue, bool hasCurrentValue, double prevValue, double sum,
+              double mult, Operator currentOperator, Operator prevOperator);
 
+        std::pair<bool, double> calculate();
+
+        double m_currentValue;
+        bool m_hasCurrentValue;
+        double m_prevValue;
+        double m_sum;
+        double m_mult;
+        Operator m_prevOperator;
+        Operator m_currentOperator;
     };
 
     Logic(QObject* parent = nullptr);
@@ -34,14 +46,10 @@ public slots:
 
 private:
     std::list<OperationsData> m_data;
+    Frame m_calcFrame;
 
     double m_currentValue;
-    double m_prevValue;
-    double m_sum;
-    double m_mult;
     double m_result;
-    Operator m_prevOperator;
-    Operator m_currentOperator;
     bool m_hasDot;
     double m_dotDivider;
     bool m_hasPreviousValue;

@@ -31,6 +31,7 @@ private slots:
     */
 
     void writeData();
+    void logicCalculate();
 };
 
 TestLogic::TestLogic()
@@ -64,6 +65,25 @@ void TestLogic::writeData()
     auto actual = l.getOperationsData();
 
     QVERIFY(actual.size() == 5);
+}
+
+void TestLogic::logicCalculate()
+{
+    Logic l;
+
+    l.writeDigit(1);
+    l.writeOperator(Logic::Operator::Plus);
+    l.writeDigit(2);
+    l.writeOperator(Logic::Operator::Mult);
+    l.writeDigit(3);
+    l.writeOperator(Logic::Operator::Minus);
+    l.writeDigit(2);
+    l.writeOperator(Logic::Operator::Mult);
+    l.writeDigit(2);
+
+    auto result = l.calculate();
+
+    QVERIFY(result.first);
 }
 
 /*
