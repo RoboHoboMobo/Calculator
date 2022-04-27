@@ -32,8 +32,7 @@ void Logic::writeDigit(int digit)
 
     m_currentValue = m_currentValue * 10 + digit;
 
-    if (m_hasPreviousValue)
-        m_hasCurrentValue = true;
+    m_hasCurrentValue = true;
 }
 
 void Logic::writeDot()
@@ -47,16 +46,14 @@ void Logic::writeDot()
 
 void Logic::writeOperator(Logic::Operator op)
 {
-    calculate();
+    m_data.emplace_back(m_currentValue);
 
     m_prevValue = m_currentValue;
     m_currentValue = 0.0;
     m_hasDot = false;
+    m_hasCurrentValue = false;
 
-    m_prevOperator = m_currentOperator;
-    m_currentOperator = op;
-
-    m_hasPreviousValue = true;
+    m_data.emplace_back(op);
 }
 
 std::pair<bool, double> Logic::calculate()
@@ -139,4 +136,12 @@ void Logic::clear()
     m_dotDivider = 0.0;
     m_hasPreviousValue = {};
     m_hasCurrentValue = {};
+}
+
+std::list<OperationsData> Logic::getOperationsData()
+{
+    if (m_hasCurrentValue)
+        m_data.emplace_back(m_currentValue);
+
+    return m_data;
 }

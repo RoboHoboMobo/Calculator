@@ -11,6 +11,8 @@ prefix = $$PWD/../App
 INCLUDEPATH += $$prefix/include
 
 SOURCES +=  tst_testlogic.cpp \
-    $$prefix/src/Logic.cpp
+    $$prefix/src/Logic.cpp \
+    $$prefix/src/OperationsData.cpp
 
-HEADERS += $$prefix/include/Logic.h
+HEADERS += $$prefix/include/Logic.h \
+    $$prefix/include/OperationsData.h

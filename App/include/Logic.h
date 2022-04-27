@@ -1,7 +1,10 @@
 #pragma once
 
+#include "OperationsData.h"
+
 #include <QObject>
 
+#include <list>
 #include <utility>
 
 class Logic : public QObject
@@ -9,12 +12,11 @@ class Logic : public QObject
     Q_OBJECT
 
 public:
-    enum Operator {
-        None = 0,
-        Plus,
-        Minus,
-        Mult,
-        Div
+    using Operator = enum OperationsData::Operator;
+
+    struct Frame
+    {
+
     };
 
     Logic(QObject* parent = nullptr);
@@ -26,9 +28,13 @@ public:
     std::pair<bool, double> calculate();
     void clear();
 
+    std::list<OperationsData> getOperationsData();
+
 public slots:
 
 private:
+    std::list<OperationsData> m_data;
+
     double m_currentValue;
     double m_prevValue;
     double m_sum;
