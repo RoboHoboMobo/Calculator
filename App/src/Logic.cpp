@@ -10,6 +10,9 @@ Logic::Logic(QObject* parent)
     , m_prevOperator{}
     , m_currentOperator{}
     , m_hasDot{}
+    , m_dotDivider{0.0}
+    , m_hasPreviousValue{}
+    , m_hasCurrentValue{}
 {
 }
 
@@ -28,6 +31,9 @@ void Logic::writeDigit(int digit)
     }
 
     m_currentValue = m_currentValue * 10 + digit;
+
+    if (m_hasPreviousValue)
+        m_hasCurrentValue = true;
 }
 
 void Logic::writeDot()
@@ -41,12 +47,16 @@ void Logic::writeDot()
 
 void Logic::writeOperator(Logic::Operator op)
 {
+    calculate();
+
     m_prevValue = m_currentValue;
     m_currentValue = 0.0;
     m_hasDot = false;
 
     m_prevOperator = m_currentOperator;
     m_currentOperator = op;
+
+    m_hasPreviousValue = true;
 }
 
 std::pair<bool, double> Logic::calculate()
@@ -61,7 +71,9 @@ std::pair<bool, double> Logic::calculate()
         else if (m_currentOperator == Operator::Mult)
             return {true, m_mult = m_prevValue * m_currentValue};
         else if (m_currentOperator == Operator::Div) {
-            if (m_currentValue == 0.0)
+            if (!m_hasCurrentValue)
+                return {true, 0.0};
+            else if (m_currentValue == 0.0)
                 return {false, 0.0};
 
             return {true, m_mult = m_prevValue / m_currentValue};
@@ -75,11 +87,11 @@ std::pair<bool, double> Logic::calculate()
             m_sum -= m_currentValue;
         else if (m_currentOperator == Operator::Mult) {
             m_sum -= m_prevValue;
-            m_mult *= m_currentValue;
+            m_mult = m_prevValue * m_currentValue;
         }
         else if (m_currentOperator == Operator::Div) {
             m_sum -= m_prevValue;
-            m_mult /= m_currentValue;
+            m_mult = m_prevValue / m_currentValue;
         }
     }
     else if (m_prevOperator == Operator::Minus) {
@@ -89,11 +101,11 @@ std::pair<bool, double> Logic::calculate()
             m_sum -= m_currentValue;
         else if (m_currentOperator == Operator::Mult) {
             m_sum += m_prevValue;
-            m_mult *= m_currentValue;
+            m_mult = m_prevValue * m_currentValue;
         }
         else if (m_currentOperator == Operator::Div) {
             m_sum += m_prevValue;
-            m_mult /= m_currentValue;
+            m_mult = m_prevValue / m_currentValue;
         }
     }
     else if (m_prevOperator == Operator::Mult || m_prevOperator == Operator::Div) {
@@ -121,5 +133,10 @@ void Logic::clear()
     m_sum = 0.0;
     m_mult = 0.0;
     m_result = 0.0;
-    m_hasDot = false;
+    m_prevOperator = {};
+    m_currentOperator = {};
+    m_hasDot = {};
+    m_dotDivider = 0.0;
+    m_hasPreviousValue = {};
+    m_hasCurrentValue = {};
 }

@@ -19,6 +19,14 @@ private slots:
     void multFirst();
     void divFirst();
 
+    void sumTwoNumbers();
+    void difTwoNumbers();
+    void multTwoNumbers();
+    void divTwoNumbers();
+
+    void addAndSub();
+    void multAndDiv();
+    void addAndMult();
 };
 
 TestLogic::TestLogic()
@@ -168,7 +176,8 @@ void TestLogic::divFirst()
 
     auto actual = l.calculate();
 
-    QVERIFY(!actual.first);
+    QVERIFY(actual.first);
+    QCOMPARE(actual.second, 0.0);
 
     l.clear();
     l.writeOperator(Logic::Operator::Div);
@@ -181,6 +190,163 @@ void TestLogic::divFirst()
 
     QVERIFY(actual.first);
     QCOMPARE(actual.second, 0.0);
+}
+
+void TestLogic::sumTwoNumbers()
+{
+    Logic l;
+
+    l.writeDigit(1);
+    l.writeDigit(2);
+    l.writeDot();
+    l.writeDigit(3);
+
+    l.writeOperator(Logic::Operator::Plus);
+
+    l.writeDigit(4);
+    l.writeDigit(5);
+    l.writeDot();
+    l.writeDigit(6);
+
+    auto actual = l.calculate();
+
+    QVERIFY(actual.first);
+    QCOMPARE(actual.second, 57.9);
+}
+
+void TestLogic::difTwoNumbers()
+{
+    Logic l;
+
+    l.writeDigit(1);
+    l.writeDigit(2);
+    l.writeDot();
+    l.writeDigit(3);
+
+    l.writeOperator(Logic::Operator::Minus);
+
+    l.writeDigit(4);
+    l.writeDigit(5);
+    l.writeDot();
+    l.writeDigit(6);
+
+    auto actual = l.calculate();
+
+    QVERIFY(actual.first);
+    QCOMPARE(actual.second, -33.3);
+}
+
+void TestLogic::multTwoNumbers()
+{
+    Logic l;
+
+    l.writeDigit(3);
+    l.writeDigit(3);
+    l.writeDot();
+    l.writeDigit(3);
+
+    l.writeOperator(Logic::Operator::Mult);
+
+    l.writeDigit(3);
+    l.writeDot();
+    l.writeDigit(0);
+
+    auto actual = l.calculate();
+
+    QVERIFY(actual.first);
+    QCOMPARE(actual.second, 99.9);
+}
+
+void TestLogic::divTwoNumbers()
+{
+    Logic l;
+
+    l.writeDigit(4);
+    l.writeDot();
+    l.writeDigit(8);
+
+    l.writeOperator(Logic::Operator::Div);
+
+    l.writeDigit(2);
+    l.writeDot();
+    l.writeDigit(4);
+
+    auto actual = l.calculate();
+
+    QVERIFY(actual.first);
+    QCOMPARE(actual.second, 2.0);
+}
+
+void TestLogic::addAndSub()
+{
+    Logic l;
+
+    l.writeDigit(1);
+    l.writeDot();
+    l.writeDigit(2);
+
+    l.writeOperator(Logic::Operator::Plus);
+
+    l.writeDigit(3);
+    l.writeDot();
+    l.writeDigit(4);
+
+    l.writeOperator(Logic::Operator::Minus);
+
+    l.writeDigit(1);
+    l.writeDot();
+    l.writeDigit(2);
+
+    auto actual = l.calculate();
+
+    QVERIFY(actual.first);
+    QCOMPARE(actual.second, 3.4);
+}
+
+void TestLogic::multAndDiv()
+{
+    Logic l;
+
+    l.writeDigit(1);
+    l.writeDot();
+    l.writeDigit(2);
+
+    l.writeOperator(Logic::Operator::Mult);
+
+    l.writeDigit(2);
+
+    l.writeOperator(Logic::Operator::Div);
+
+    l.writeDigit(1);
+    l.writeDot();
+    l.writeDigit(2);
+
+    auto actual = l.calculate();
+
+    QVERIFY(actual.first);
+    QCOMPARE(actual.second, 2.0);
+}
+
+void TestLogic::addAndMult()
+{
+    Logic l;
+
+    l.writeDigit(1);
+    l.writeDot();
+    l.writeDigit(2);
+
+    l.writeOperator(Logic::Operator::Plus);
+
+    l.writeDigit(2);
+
+    l.writeOperator(Logic::Operator::Mult);
+
+    l.writeDigit(2);
+
+    auto actual = l.calculate();
+
+    QVERIFY(actual.first);
+    QCOMPARE(actual.second, 5.2);
 }
 
 QTEST_APPLESS_MAIN(TestLogic)

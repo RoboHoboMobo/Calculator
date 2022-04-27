@@ -38,4 +38,6 @@ private:
     Operator m_currentOperator;
     bool m_hasDot;
     double m_dotDivider;
+    bool m_hasPreviousValue;
+    bool m_hasCurrentValue;
 };
