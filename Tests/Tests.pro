@@ -12,7 +12,9 @@ INCLUDEPATH += $$prefix/include
 
 SOURCES +=  tst_testlogic.cpp \
     $$prefix/src/Logic.cpp \
-    $$prefix/src/OperationsData.cpp
+    $$prefix/src/OperationsData.cpp \
+    $$prefix/src/CalculationFrame.cpp
 
 HEADERS += $$prefix/include/Logic.h \
-    $$prefix/include/OperationsData.h
+    $$prefix/include/OperationsData.h \
+    $$prefix/src/CalculationFrame.h

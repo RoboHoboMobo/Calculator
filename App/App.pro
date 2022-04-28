@@ -13,6 +13,7 @@ INCLUDEPATH += $$PWD/include
 SOURCES += \
     main.cpp \
     src/Button.cpp \
+    src/CalculationFrame.cpp \
     src/Calculator.cpp \
     src/Logic.cpp \
     src/OperationsData.cpp
@@ -24,6 +25,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     include/Button.h \
+    include/CalculationFrame.h \
     include/Calculator.h \
     include/Logic.h \
     include/OperationsData.h

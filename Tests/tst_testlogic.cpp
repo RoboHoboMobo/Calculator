@@ -11,7 +11,7 @@ public:
     ~TestLogic();
 
 private slots:
-    /*
+    void writeData();
     void calculateWithoutAnyInput();
     void inputNumber();
     void inputNumberWithDot();
@@ -28,9 +28,7 @@ private slots:
     void addAndSub();
     void multAndDiv();
     void addAndMult();
-    */
 
-    void writeData();
     void logicCalculate();
 };
 
@@ -67,26 +65,6 @@ void TestLogic::writeData()
     QVERIFY(actual.size() == 5);
 }
 
-void TestLogic::logicCalculate()
-{
-    Logic l;
-
-    l.writeDigit(1);
-    l.writeOperator(Logic::Operator::Plus);
-    l.writeDigit(2);
-    l.writeOperator(Logic::Operator::Mult);
-    l.writeDigit(3);
-    l.writeOperator(Logic::Operator::Minus);
-    l.writeDigit(2);
-    l.writeOperator(Logic::Operator::Mult);
-    l.writeDigit(2);
-
-    auto result = l.calculate();
-
-    QVERIFY(result.first);
-}
-
-/*
 void TestLogic::calculateWithoutAnyInput()
 {
     Logic l;
@@ -128,13 +106,6 @@ void TestLogic::inputNumberWithDot()
     l.writeDigit(1);
     l.writeDigit(2);
     l.writeDigit(3);
-    l.writeDot();
-
-    actual = l.calculate();
-
-    QVERIFY(actual.first);
-    QCOMPARE(actual.second, 123.0);
-
     l.writeDot();
     l.writeDigit(4);
     l.writeDigit(5);
@@ -396,7 +367,25 @@ void TestLogic::addAndMult()
     QVERIFY(actual.first);
     QCOMPARE(actual.second, 5.2);
 }
-*/
+
+void TestLogic::logicCalculate()
+{
+    Logic l;
+
+    l.writeDigit(1);
+    l.writeOperator(Logic::Operator::Plus);
+    l.writeDigit(2);
+    l.writeOperator(Logic::Operator::Mult);
+    l.writeDigit(3);
+    l.writeOperator(Logic::Operator::Minus);
+    l.writeDigit(2);
+    l.writeOperator(Logic::Operator::Mult);
+    l.writeDigit(2);
+
+    auto result = l.calculate();
+
+    QVERIFY(result.first);
+}
 
 QTEST_APPLESS_MAIN(TestLogic)
 
