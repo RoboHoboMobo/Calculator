@@ -7,6 +7,8 @@
 
 Calculator::Calculator(QWidget* parent)
     : QWidget(parent)
+    , m_display{}
+    , m_logic{}
 {
     std::array<Button*, 10> digits;
 
@@ -27,7 +29,7 @@ Calculator::Calculator(QWidget* parent)
     m_display = new QLineEdit("0", this);
     m_display->setReadOnly(true);
     m_display->setAlignment(Qt::AlignRight);
-    m_display->setMaxLength(8);
+    m_display->setMaxLength(20);
 
     QGridLayout* mainLayout = new QGridLayout();
     mainLayout->setSizeConstraint(QLayout::SetFixedSize);
@@ -52,10 +54,91 @@ Calculator::Calculator(QWidget* parent)
 
     setLayout(mainLayout);
 
-    m_logic = new Logic();
+    for (size_t i = 0; i < digits.size(); ++i)
+        connect(digits[i], SIGNAL(clicked()), this, SLOT(digitClicked()));
+
+    connect(clearButton, SIGNAL(clicked()), this, SLOT(clearClicked()));
+    // connect(cancelButton, SIGNAL(clicked()), this, SLOT(DigitClicked()));
+    connect(plusButton, SIGNAL(clicked()), this, SLOT(plusClicked()));
+    connect(minusButton, SIGNAL(clicked()), this, SLOT(minusClicked()));
+    connect(multButton, SIGNAL(clicked()), this, SLOT(multClicked()));
+    connect(divButton, SIGNAL(clicked()), this, SLOT(divClicked()));
+    // connect(percentButton, SIGNAL(clicked()), this, SLOT(DigitClicked()));
+    connect(dotButton, SIGNAL(clicked()), this, SLOT(dotClicked()));
+    connect(equalButton, SIGNAL(clicked()), this, SLOT(equalClicked()));
 }
 
-double Calculator::calculate()
+void Calculator::digitClicked()
 {
-    return {};
+    Button* digitButton = qobject_cast<Button*>(sender());
+
+    const int digit = (digitButton->text()).toInt();
+
+    if (m_display->text() == "0") {
+        if (digit == 0)
+            return;
+
+        m_display->clear();
+    }
+
+    m_logic.writeDigit(digit);
+
+    m_display->setText(m_display->text() + QString::number(digit));
+}
+
+void Calculator::dotClicked()
+{
+    m_logic.writeDot();
+
+    m_display->setText(m_display->text() + ".");
+}
+
+void Calculator::plusClicked()
+{
+    m_logic.writeOperator(Logic::Operator::Plus);
+
+    m_display->setText(m_display->text() + " + ");
+}
+
+void Calculator::minusClicked()
+{
+    m_logic.writeOperator(Logic::Operator::Minus);
+
+    m_display->setText(m_display->text() + " - ");
+}
+
+void Calculator::multClicked()
+{
+    m_logic.writeOperator(Logic::Operator::Mult);
+
+    m_display->setText(m_display->text() + " * ");
+}
+
+void Calculator::divClicked()
+{
+    m_logic.writeOperator(Logic::Operator::Div);
+
+    m_display->setText(m_display->text() + " / ");
+}
+
+void Calculator::equalClicked()
+{
+    auto result = m_logic.calculate();
+
+    if (!result.first) {
+        m_display->setText("Error!");
+
+        return;
+    }
+
+    m_display->setText(QString::number(result.second));
+
+    m_logic.clear();
+}
+
+void Calculator::clearClicked()
+{
+    m_display->clear();
+
+    m_logic.clear();
 }

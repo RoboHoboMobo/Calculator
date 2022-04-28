@@ -1,8 +1,7 @@
 #include "Logic.h"
 
-Logic::Logic(QObject* parent)
-    : QObject(parent)
-    , m_data{}
+Logic::Logic()
+    : m_data{}
     , m_frame{}
     , m_currentValue{0.0}
     , m_result{0.0}

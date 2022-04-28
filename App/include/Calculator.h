@@ -12,9 +12,20 @@ class Calculator : public QWidget
 public:
     Calculator(QWidget* parent = nullptr);
 
-    double calculate();
+    // std::pair<bool, double> calculate();
+
+public slots:
+    void digitClicked();
+    void dotClicked();
+    void plusClicked();
+    void minusClicked();
+    void multClicked();
+    void divClicked();
+
+    void equalClicked();
+    void clearClicked();
 
 private:
     QLineEdit* m_display;
-    Logic* m_logic;
+    Logic m_logic;
 };

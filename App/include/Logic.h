@@ -3,18 +3,14 @@
 #include "OperationsData.h"
 #include "CalculationFrame.h"
 
-#include <QObject>
-
 #include <list>
 
-class Logic : public QObject
+class Logic
 {
-    Q_OBJECT
-
 public:
     using Operator = enum OperationsData::Operator;
 
-    Logic(QObject* parent = nullptr);
+    Logic();
 
     double getResult() const;
     void writeDigit(int);
@@ -24,8 +20,6 @@ public:
     void clear();
 
     std::list<OperationsData> getOperationsData();
-
-public slots:
 
 private:
     std::list<OperationsData> m_data;
