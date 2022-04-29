@@ -139,10 +139,14 @@ void Calculator::divClicked()
 
 void Calculator::percentClicked()
 {
+    calculate();
+    m_logic.writeOperator(Logic::Operator::Div);
+    m_logic.writeDigit(100);
+
     auto result = calculate();
 
     if (result.first)
-        m_display->setText(QString::number(result.second * 0.01));
+        m_display->setText(QString::number(result.second));
 }
 
 void Calculator::equalClicked()
