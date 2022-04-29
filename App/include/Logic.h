@@ -12,7 +12,7 @@ public:
 
     Logic();
 
-    double getResult() const;
+    std::pair<bool, double> getResult();
     void writeDigit(int);
     void writeDot();
     void writeOperator(Operator);
@@ -27,7 +27,7 @@ private:
     CalculationFrame m_frame;
 
     double m_currentValue;
-    double m_result;
+    std::pair<bool, double> m_result;
     bool m_hasDot;
     double m_dotDivider;
     bool m_hasPreviousValue;

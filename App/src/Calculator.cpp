@@ -143,8 +143,6 @@ void Calculator::percentClicked()
 
     if (result.first)
         m_display->setText(QString::number(result.second * 0.01));
-
-    m_logic.clear();
 }
 
 void Calculator::equalClicked()
@@ -153,8 +151,6 @@ void Calculator::equalClicked()
 
     if (result.first)
         m_display->setText(QString::number(result.second));
-
-    m_logic.clear();
 }
 
 void Calculator::clearClicked()
@@ -186,7 +182,7 @@ void Calculator::cancelClicked()
 
 std::pair<bool, double> Calculator::calculate()
 {
-    auto result = m_logic.calculate();
+    auto result = m_logic.getResult();
 
     if (!result.first) {
         m_display->setText("Error!");

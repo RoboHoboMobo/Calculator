@@ -4,7 +4,7 @@ Logic::Logic()
     : m_data{}
     , m_frame{}
     , m_currentValue{0.0}
-    , m_result{0.0}
+    , m_result{}
     , m_hasDot{}
     , m_dotDivider{0.0}
     , m_hasPreviousValue{}
@@ -12,9 +12,22 @@ Logic::Logic()
 {
 }
 
-double Logic::getResult() const
+std::pair<bool, double> Logic::getResult()
 {
-    return m_result;
+    auto result = calculate();
+
+    clear();
+
+    if (result.first) {
+        m_result = result;
+        m_currentValue = m_result.second;
+        m_hasCurrentValue = true;
+
+        m_frame.currentValue = m_result.second;
+        m_frame.hasCurrentValue = true;
+    }
+
+    return result;
 }
 
 void Logic::writeDigit(int digit)
@@ -79,6 +92,8 @@ std::pair<bool, double> Logic::calculate()
         }
     }
 
+    m_result = result;
+
     return result;
 }
 
@@ -87,7 +102,7 @@ void Logic::clear()
     m_data.clear();
     m_frame = {};
     m_currentValue = 0.0;
-    m_result = 0.0;
+    m_result = {};
     m_hasDot = {};
     m_dotDivider = 0.0;
     m_hasPreviousValue = {};
