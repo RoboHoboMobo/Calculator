@@ -18,6 +18,7 @@ public:
     void writeOperator(Operator);
     std::pair<bool, double> calculate();
     void clear();
+    void cancel();
 
     std::list<OperationsData> getOperationsData();
 

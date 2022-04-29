@@ -1,15 +1,31 @@
 #include "Calculator.h"
 
+#include <QGridLayout>
+
 #include <array>
 #include <cassert>
+#include <algorithm>
 
-#include <QGridLayout>
+namespace {
+
+bool isOperator(QString str)
+{
+    return str == "+" || str == "-" || str =="*" || str == "/";
+}
+
+int lastIndexOfOperator(QString str)
+{
+    return std::max({str.lastIndexOf("+"), str.lastIndexOf("-"),
+                     str.lastIndexOf("*"), str.lastIndexOf("/")});
+}
+
+} // namespace
 
 Calculator::Calculator(QWidget* parent)
     : QWidget(parent)
     , m_display{}
     , m_logic{}
-{
+{    
     std::array<Button*, 10> digits;
 
     for (size_t i = 0; i < 10; ++i)
@@ -29,7 +45,7 @@ Calculator::Calculator(QWidget* parent)
     m_display = new QLineEdit("0", this);
     m_display->setReadOnly(true);
     m_display->setAlignment(Qt::AlignRight);
-    m_display->setMaxLength(20);
+    m_display->setMaxLength(30);
 
     QGridLayout* mainLayout = new QGridLayout();
     mainLayout->setSizeConstraint(QLayout::SetFixedSize);
@@ -58,12 +74,12 @@ Calculator::Calculator(QWidget* parent)
         connect(digits[i], SIGNAL(clicked()), this, SLOT(digitClicked()));
 
     connect(clearButton, SIGNAL(clicked()), this, SLOT(clearClicked()));
-    // connect(cancelButton, SIGNAL(clicked()), this, SLOT(DigitClicked()));
+    connect(cancelButton, SIGNAL(clicked()), this, SLOT(cancelClicked()));
     connect(plusButton, SIGNAL(clicked()), this, SLOT(plusClicked()));
     connect(minusButton, SIGNAL(clicked()), this, SLOT(minusClicked()));
     connect(multButton, SIGNAL(clicked()), this, SLOT(multClicked()));
     connect(divButton, SIGNAL(clicked()), this, SLOT(divClicked()));
-    // connect(percentButton, SIGNAL(clicked()), this, SLOT(DigitClicked()));
+    connect(percentButton, SIGNAL(clicked()), this, SLOT(percentClicked()));
     connect(dotButton, SIGNAL(clicked()), this, SLOT(dotClicked()));
     connect(equalButton, SIGNAL(clicked()), this, SLOT(equalClicked()));
 }
@@ -121,24 +137,62 @@ void Calculator::divClicked()
     m_display->setText(m_display->text() + " / ");
 }
 
+void Calculator::percentClicked()
+{
+    auto result = calculate();
+
+    if (result.first)
+        m_display->setText(QString::number(result.second * 0.01));
+
+    m_logic.clear();
+}
+
 void Calculator::equalClicked()
 {
-    auto result = m_logic.calculate();
+    auto result = calculate();
 
-    if (!result.first) {
-        m_display->setText("Error!");
-
-        return;
-    }
-
-    m_display->setText(QString::number(result.second));
+    if (result.first)
+        m_display->setText(QString::number(result.second));
 
     m_logic.clear();
 }
 
 void Calculator::clearClicked()
 {
-    m_display->clear();
+    m_display->setText("0");
 
     m_logic.clear();
+}
+
+void Calculator::cancelClicked()
+{
+    auto str = m_display->text();
+
+
+    if (str.back().isDigit()) {
+        if (str.size() && str != "0")
+            str.truncate(str.lastIndexOf(' ') + 1);
+    }
+    else
+        str.truncate(lastIndexOfOperator(str) - 1);
+
+    if (str.isEmpty())
+        str = "0";
+
+    m_display->setText(str);
+
+    m_logic.cancel();
+}
+
+std::pair<bool, double> Calculator::calculate()
+{
+    auto result = m_logic.calculate();
+
+    if (!result.first) {
+        m_display->setText("Error!");
+
+        return {false, 0.0};
+    }
+
+    return result;
 }

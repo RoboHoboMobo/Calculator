@@ -94,6 +94,12 @@ void Logic::clear()
     m_hasCurrentValue = {};
 }
 
+void Logic::cancel()
+{
+    if (m_data.size() > 0)
+        m_data.pop_back();
+}
+
 std::list<OperationsData> Logic::getOperationsData()
 {
     if (m_hasCurrentValue)
