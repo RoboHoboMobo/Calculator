@@ -1,5 +1,7 @@
 #include "Calculator.h"
 
+#include <Logic.h>
+
 #include <QGridLayout>
 
 #include <array>
@@ -7,11 +9,6 @@
 #include <algorithm>
 
 namespace {
-
-bool isOperator(QString str)
-{
-    return str == "+" || str == "-" || str =="*" || str == "/";
-}
 
 int lastIndexOfOperator(QString str)
 {
@@ -82,6 +79,8 @@ Calculator::Calculator(QWidget* parent)
     connect(percentButton, SIGNAL(clicked()), this, SLOT(percentClicked()));
     connect(dotButton, SIGNAL(clicked()), this, SLOT(dotClicked()));
     connect(equalButton, SIGNAL(clicked()), this, SLOT(equalClicked()));
+
+    m_logic = std::make_unique<Logic>();
 }
 
 void Calculator::digitClicked()
@@ -97,42 +96,42 @@ void Calculator::digitClicked()
         m_display->clear();
     }
 
-    m_logic.writeDigit(digit);
+    m_logic->writeDigit(digit);
 
     m_display->setText(m_display->text() + QString::number(digit));
 }
 
 void Calculator::dotClicked()
 {
-    m_logic.writeDot();
+    m_logic->writeDot();
 
     m_display->setText(m_display->text() + ".");
 }
 
 void Calculator::plusClicked()
 {
-    m_logic.writeOperator(Logic::Operator::Plus);
+    m_logic->writeOperator(Logic::Operator::Plus);
 
     m_display->setText(m_display->text() + " + ");
 }
 
 void Calculator::minusClicked()
 {
-    m_logic.writeOperator(Logic::Operator::Minus);
+    m_logic->writeOperator(Logic::Operator::Minus);
 
     m_display->setText(m_display->text() + " - ");
 }
 
 void Calculator::multClicked()
 {
-    m_logic.writeOperator(Logic::Operator::Mult);
+    m_logic->writeOperator(Logic::Operator::Mult);
 
     m_display->setText(m_display->text() + " * ");
 }
 
 void Calculator::divClicked()
 {
-    m_logic.writeOperator(Logic::Operator::Div);
+    m_logic->writeOperator(Logic::Operator::Div);
 
     m_display->setText(m_display->text() + " / ");
 }
@@ -140,8 +139,8 @@ void Calculator::divClicked()
 void Calculator::percentClicked()
 {
     calculate();
-    m_logic.writeOperator(Logic::Operator::Div);
-    m_logic.writeDigit(100);
+    m_logic->writeOperator(Logic::Operator::Div);
+    m_logic->writeDigit(100);
 
     auto result = calculate();
 
@@ -161,7 +160,7 @@ void Calculator::clearClicked()
 {
     m_display->setText("0");
 
-    m_logic.clear();
+    m_logic->clear();
 }
 
 void Calculator::cancelClicked()
@@ -181,12 +180,12 @@ void Calculator::cancelClicked()
 
     m_display->setText(str);
 
-    m_logic.cancel();
+    m_logic->cancel();
 }
 
 std::pair<bool, double> Calculator::calculate()
 {
-    auto result = m_logic.getResult();
+    auto result = m_logic->getResult();
 
     if (!result.first) {
         m_display->setText("Error!");

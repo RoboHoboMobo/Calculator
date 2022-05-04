@@ -3,7 +3,9 @@
 #include <QLineEdit>
 
 #include "Button.h"
-#include "Logic.h"
+#include "ILogic.h"
+
+#include <memory>
 
 class Calculator : public QWidget
 {
@@ -29,5 +31,5 @@ private:
     std::pair<bool, double> calculate();
 
     QLineEdit* m_display;
-    Logic m_logic;
+    std::unique_ptr<ILogic> m_logic;
 };
