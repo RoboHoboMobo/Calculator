@@ -389,4 +389,4 @@ void TestLogic::logicCalculate()
 
 QTEST_APPLESS_MAIN(TestLogic)
 
-#include "tst_testlogic.moc"
+#include "tst_logic.moc"

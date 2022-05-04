@@ -1,20 +1,6 @@
-QT += testlib
-QT -= gui
+QT += core
 
-CONFIG += qt console warn_on depend_includepath testcase
-CONFIG -= app_bundle
+TEMPLATE = subdirs
 
-# TEMPLATE = app
-
-prefix = $$PWD/../App
-
-INCLUDEPATH += $$prefix/include
-
-SOURCES +=  tst_testlogic.cpp \
-    $$prefix/src/Logic.cpp \
-    $$prefix/src/OperationsData.cpp \
-    $$prefix/src/CalculationFrame.cpp
-
-HEADERS += $$prefix/include/Logic.h \
-    $$prefix/include/OperationsData.h \
-    $$prefix/src/CalculationFrame.h
+SUBDIRS += TestLogic \
+    TestCalculator
