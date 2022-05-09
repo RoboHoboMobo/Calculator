@@ -39,7 +39,8 @@ Calculator::Calculator(QWidget* parent)
     Button* dotButton = new Button(".", this);
     Button* equalButton = new Button("=", this);
 
-    m_display = new QLineEdit("0", this);
+    m_text = "0";
+    m_display = new QLineEdit(m_text, this);
     m_display->setReadOnly(true);
     m_display->setAlignment(Qt::AlignRight);
     m_display->setMaxLength(30);
@@ -68,7 +69,7 @@ Calculator::Calculator(QWidget* parent)
     setLayout(mainLayout);
 
     for (size_t i = 0; i < digits.size(); ++i)
-        connect(digits[i], SIGNAL(clicked()), this, SLOT(digitClicked()));
+        connect(digits[i], SIGNAL(digitClicked(int)), this, SLOT(digitClicked(int)));
 
     connect(clearButton, SIGNAL(clicked()), this, SLOT(clearClicked()));
     connect(cancelButton, SIGNAL(clicked()), this, SLOT(cancelClicked()));
@@ -83,115 +84,141 @@ Calculator::Calculator(QWidget* parent)
     m_logic = std::make_unique<Logic>();
 }
 
-void Calculator::digitClicked()
+QString Calculator::getDisplayText() const
 {
-    Button* digitButton = qobject_cast<Button*>(sender());
+    return m_text;
+}
 
-    const int digit = (digitButton->text()).toInt();
+void Calculator::digitClicked(int digit)
+{
+    checkError();
 
-    if (m_display->text() == "0") {
+    if (m_text == "0") {
         if (digit == 0)
             return;
 
-        m_display->clear();
+        m_text.clear();
     }
 
     m_logic->writeDigit(digit);
 
-    m_display->setText(m_display->text() + QString::number(digit));
+    m_text += QString::number(digit);
+    m_display->setText(m_text);
 }
 
 void Calculator::dotClicked()
 {
+    checkError();
+
     m_logic->writeDot();
 
-    m_display->setText(m_display->text() + ".");
+    m_text += ".";
+    m_display->setText(m_text);
 }
 
 void Calculator::plusClicked()
 {
+    checkError();
+
     m_logic->writeOperator(Logic::Operator::Plus);
 
-    m_display->setText(m_display->text() + " + ");
+    m_text += " + ";
+    m_display->setText(m_text);
 }
 
 void Calculator::minusClicked()
 {
+    checkError();
+
     m_logic->writeOperator(Logic::Operator::Minus);
 
-    m_display->setText(m_display->text() + " - ");
+    m_text += " - ";
+    m_display->setText(m_text);
 }
 
 void Calculator::multClicked()
 {
+    checkError();
+
     m_logic->writeOperator(Logic::Operator::Mult);
 
-    m_display->setText(m_display->text() + " * ");
+    m_text += " * ";
+    m_display->setText(m_text);
 }
 
 void Calculator::divClicked()
 {
+    checkError();
+
     m_logic->writeOperator(Logic::Operator::Div);
 
-    m_display->setText(m_display->text() + " / ");
+    m_text += " / ";
+    m_display->setText(m_text);
 }
 
 void Calculator::percentClicked()
 {
+    checkError();
+
     calculate();
     m_logic->writeOperator(Logic::Operator::Div);
     m_logic->writeDigit(100);
 
-    auto result = calculate();
-
-    if (result.first)
-        m_display->setText(QString::number(result.second));
+    calculate();
 }
 
 void Calculator::equalClicked()
 {
-    auto result = calculate();
-
-    if (result.first)
-        m_display->setText(QString::number(result.second));
+    calculate();
 }
 
 void Calculator::clearClicked()
 {
-    m_display->setText("0");
-
     m_logic->clear();
+
+    m_text = "0";
+
+    m_display->setText(m_text);
 }
 
 void Calculator::cancelClicked()
 {
-    auto str = m_display->text();
+    m_logic->cancel();
 
-
-    if (str.back().isDigit()) {
-        if (str.size() && str != "0")
-            str.truncate(str.lastIndexOf(' ') + 1);
+    if (m_text.back().isDigit()) {
+        if (m_text.size() && m_text != "0")
+            m_text.truncate(m_text.lastIndexOf(' ') + 1);
     }
     else
-        str.truncate(lastIndexOfOperator(str) - 1);
+        m_text.truncate(lastIndexOfOperator(m_text) - 1);
 
-    if (str.isEmpty())
-        str = "0";
+    if (m_text.isEmpty())
+        m_text = "0";
 
-    m_display->setText(str);
-
-    m_logic->cancel();
+    m_display->setText(m_text);
 }
 
 std::pair<bool, double> Calculator::calculate()
 {
     auto result = m_logic->getResult();
 
-    if (!result.first) {
-        m_display->setText("Error!");
+    if (result.first)
+        m_text = QString::number(result.second);
+    else
+        m_text = "Error!";
 
-        return {false, 0.0};
-    }
+    m_display->setText(m_text);
 
     return result;
+}
+
+void Calculator::checkError()
+{
+    if (m_text == "Error!")
+    {
+        m_logic->clear();
+
+        m_text = "0";
+        m_display->setText(m_text);
+    }
 }

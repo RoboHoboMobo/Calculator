@@ -14,8 +14,10 @@ class Calculator : public QWidget
 public:
     Calculator(QWidget* parent = nullptr);
 
+    QString getDisplayText() const;
+
 public slots:
-    void digitClicked();
+    void digitClicked(int);
     void dotClicked();
     void plusClicked();
     void minusClicked();
@@ -29,7 +31,9 @@ public slots:
 
 private:
     std::pair<bool, double> calculate();
+    void checkError();
 
     QLineEdit* m_display;
+    QString m_text;
     std::unique_ptr<ILogic> m_logic;
 };
