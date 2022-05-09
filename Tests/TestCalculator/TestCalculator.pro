@@ -10,8 +10,8 @@ SOURCES += tst_calculator.cpp \
     $$prefix/src/Calculator.cpp \
     $$prefix/src/Button.cpp \
     $$prefix/src/OperationsData.cpp \
-    MocCalculationFrame.cpp \
-    MocLogic.cpp
+    MockCalculationFrame.cpp \
+    MockLogic.cpp
 
 HEADERS += $$prefix/include/Calculator.h \
     $$prefix/include/Button.h \

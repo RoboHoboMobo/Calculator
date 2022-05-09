@@ -29,6 +29,5 @@ private:
     std::pair<bool, double> m_result;
     bool m_hasDot;
     double m_dotDivider;
-    bool m_hasPreviousValue;
     bool m_hasCurrentValue;
 };

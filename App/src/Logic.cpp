@@ -7,7 +7,6 @@ Logic::Logic()
     , m_result{}
     , m_hasDot{}
     , m_dotDivider{0.0}
-    , m_hasPreviousValue{}
     , m_hasCurrentValue{}
 {
 }
@@ -105,7 +104,6 @@ void Logic::clear()
     m_result = {};
     m_hasDot = {};
     m_dotDivider = 0.0;
-    m_hasPreviousValue = {};
     m_hasCurrentValue = {};
 }
 
