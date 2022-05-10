@@ -2,6 +2,8 @@
 
 #include "Calculator.h"
 
+#include "MockLogic.h"
+
 class TestCalculator : public QObject
 {
     Q_OBJECT
@@ -13,7 +15,11 @@ public:
 private slots:
     void checkDefaultText();
     void inputDigit();
-    void intputNumber();
+    void inputOnlyDot();
+    void intputNumberWithDot();
+    void checkError();
+    void digitAfterError();
+    void operatorAfterError();
 };
 
 TestCalculator::TestCalculator()
@@ -40,7 +46,16 @@ void TestCalculator::inputDigit()
     QCOMPARE(c.getDisplayText(), "8");
 }
 
-void TestCalculator::intputNumber()
+void TestCalculator::inputOnlyDot()
+{
+    Calculator c;
+
+    c.dotClicked();
+
+    QCOMPARE(c.getDisplayText(), "0.");
+}
+
+void TestCalculator::intputNumberWithDot()
 {
     Calculator c;
 
@@ -50,6 +65,41 @@ void TestCalculator::intputNumber()
     c.digitClicked(3);
 
     QCOMPARE(c.getDisplayText(), "12.3");
+}
+
+void TestCalculator::checkError()
+{
+    Calculator c;
+
+    MockLogic::setResult({false, 0.0});
+
+    c.equalClicked();
+
+    QCOMPARE(c.getDisplayText(), "Error!");
+}
+
+void TestCalculator::digitAfterError()
+{
+    Calculator c;
+
+    MockLogic::setResult({false, 0.0});
+
+    c.equalClicked();
+    c.digitClicked(8);
+
+    QCOMPARE(c.getDisplayText(), "8");
+}
+
+void TestCalculator::operatorAfterError()
+{
+    Calculator c;
+
+    MockLogic::setResult({false, 0.0});
+
+    c.equalClicked();
+    c.plusClicked();
+
+    QCOMPARE(c.getDisplayText(), "0 + ");
 }
 
 QTEST_MAIN(TestCalculator)

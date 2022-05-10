@@ -1,4 +1,15 @@
-#include "Logic.h"
+#include "MockLogic.h"
+
+namespace {
+
+std::pair<bool, double> mockResult{};
+
+} // namespace
+
+void MockLogic::setResult(std::pair<bool, double> result)
+{
+    mockResult = result;
+}
 
 Logic::Logic()
     : m_data{}
@@ -13,7 +24,7 @@ Logic::Logic()
 
 std::pair<bool, double> Logic::getResult()
 {
-    return {true, 0.0};
+    return mockResult;
 }
 
 void Logic::writeDigit(int)

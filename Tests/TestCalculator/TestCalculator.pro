@@ -18,5 +18,6 @@ HEADERS += $$prefix/include/Calculator.h \
     $$prefix/include/OperationsData.h \
     $$prefix/include/CalculationFrame.h \
     $$prefix/include/ILogic.h \
-    $$prefix/include/Logic.h
+    $$prefix/include/Logic.h \
+    MockLogic.h
 
