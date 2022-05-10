@@ -22,6 +22,7 @@ Calculator::Calculator(QWidget* parent)
     : QWidget(parent)
     , m_display{}
     , m_logic{}
+    , m_isNeedToClear{}
 {    
     std::array<Button*, 10> digits;
 
@@ -93,6 +94,9 @@ void Calculator::digitClicked(int digit)
 {
     checkError();
 
+    if (m_isNeedToClear)
+        clearAfterEqual();
+
     if (m_text == "0") {
         if (digit == 0)
             return;
@@ -110,6 +114,9 @@ void Calculator::dotClicked()
 {
     checkError();
 
+    if (m_isNeedToClear)
+        clearAfterEqual();
+
     m_logic->writeDot();
 
     m_text += ".";
@@ -119,6 +126,8 @@ void Calculator::dotClicked()
 void Calculator::plusClicked()
 {
     checkError();
+
+    m_isNeedToClear = false;
 
     m_logic->writeOperator(Logic::Operator::Plus);
 
@@ -130,6 +139,8 @@ void Calculator::minusClicked()
 {
     checkError();
 
+    m_isNeedToClear = false;
+
     m_logic->writeOperator(Logic::Operator::Minus);
 
     m_text += " - ";
@@ -140,6 +151,8 @@ void Calculator::multClicked()
 {
     checkError();
 
+    m_isNeedToClear = false;
+
     m_logic->writeOperator(Logic::Operator::Mult);
 
     m_text += " * ";
@@ -149,6 +162,8 @@ void Calculator::multClicked()
 void Calculator::divClicked()
 {
     checkError();
+
+    m_isNeedToClear = false;
 
     m_logic->writeOperator(Logic::Operator::Div);
 
@@ -165,15 +180,21 @@ void Calculator::percentClicked()
     m_logic->writeDigit(100);
 
     calculate();
+
+    m_isNeedToClear = true;
 }
 
 void Calculator::equalClicked()
 {
     calculate();
+
+    m_isNeedToClear = true;
 }
 
 void Calculator::clearClicked()
 {
+    m_isNeedToClear = false;
+
     m_logic->clear();
 
     m_text = "0";
@@ -183,6 +204,8 @@ void Calculator::clearClicked()
 
 void Calculator::cancelClicked()
 {
+    m_isNeedToClear = false;
+
     m_logic->cancel();
 
     if (m_text.back().isDigit()) {
@@ -221,4 +244,11 @@ void Calculator::checkError()
         m_text = "0";
         m_display->setText(m_text);
     }
+}
+
+void Calculator::clearAfterEqual()
+{
+    m_isNeedToClear = false;
+
+    clearClicked();
 }

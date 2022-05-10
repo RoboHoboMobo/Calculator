@@ -20,6 +20,8 @@ private slots:
     void checkError();
     void digitAfterError();
     void operatorAfterError();
+    void inputNumberAfterEqual();
+    void inputNumberAfterPercent();
 };
 
 TestCalculator::TestCalculator()
@@ -100,6 +102,37 @@ void TestCalculator::operatorAfterError()
     c.plusClicked();
 
     QCOMPARE(c.getDisplayText(), "0 + ");
+}
+
+void TestCalculator::inputNumberAfterEqual()
+{
+    Calculator c;
+
+    c.digitClicked(1);
+    c.dotClicked();
+    c.digitClicked(2);
+    c.digitClicked(3);
+
+    c.equalClicked();
+
+    c.digitClicked(8);
+
+    QCOMPARE(c.getDisplayText(), "8");
+}
+
+void TestCalculator::inputNumberAfterPercent()
+{
+    Calculator c;
+
+    c.digitClicked(1);
+    c.digitClicked(2);
+    c.digitClicked(3);
+
+    c.percentClicked();
+
+    c.digitClicked(8);
+
+    QCOMPARE(c.getDisplayText(), "8");
 }
 
 QTEST_MAIN(TestCalculator)

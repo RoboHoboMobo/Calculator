@@ -32,8 +32,10 @@ public slots:
 private:
     std::pair<bool, double> calculate();
     void checkError();
+    void clearAfterEqual();
 
     QLineEdit* m_display;
     QString m_text;
     std::unique_ptr<ILogic> m_logic;
+    bool m_isNeedToClear;
 };
