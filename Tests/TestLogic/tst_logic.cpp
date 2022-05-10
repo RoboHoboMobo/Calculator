@@ -30,6 +30,8 @@ private slots:
     void addAndMult();
 
     void logicCalculate();
+    void cancelThenPlus();
+    void cancelTwice();
 };
 
 TestLogic::TestLogic()
@@ -385,6 +387,48 @@ void TestLogic::logicCalculate()
     auto result = l.calculate();
 
     QVERIFY(result.first);
+}
+
+void TestLogic::cancelThenPlus()
+{
+    Logic l;
+
+    l.writeDigit(1);
+    l.writeDot();
+    l.writeDigit(2);
+    l.writeDigit(3);
+
+    l.writeOperator(Logic::Operator::Plus);
+    l.writeDigit(8);
+
+    l.cancel();
+    l.writeDigit(5);
+
+    auto result = l.calculate();
+
+    QVERIFY(result.first);
+    QCOMPARE(result.second, 6.23);
+}
+
+void TestLogic::cancelTwice()
+{
+    Logic l;
+
+    l.writeDigit(1);
+    l.writeDot();
+    l.writeDigit(2);
+    l.writeDigit(3);
+
+    l.writeOperator(Logic::Operator::Plus);
+    l.writeDigit(8);
+
+    l.cancel();
+    l.cancel();
+
+    auto result = l.calculate();
+
+    QVERIFY(result.first);
+    QCOMPARE(result.second, 1.23);
 }
 
 QTEST_APPLESS_MAIN(TestLogic)
