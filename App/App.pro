@@ -15,6 +15,7 @@ SOURCES += \
     src/Button.cpp \
     src/CalculationFrame.cpp \
     src/Calculator.cpp \
+    src/Delegate.cpp \
     src/Logic.cpp \
     src/OperationsData.cpp
 
@@ -27,6 +28,8 @@ HEADERS += \
     include/Button.h \
     include/CalculationFrame.h \
     include/Calculator.h \
+    include/Delegate.h \
+    include/IDelegate.h \
     include/ILogic.h \
     include/Logic.h \
     include/OperationsData.h

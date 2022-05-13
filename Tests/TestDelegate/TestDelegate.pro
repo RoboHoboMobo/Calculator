@@ -6,18 +6,20 @@ prefix = $$PWD/../../App
 
 INCLUDEPATH += $$prefix/include
 
-SOURCES += tst_calculator.cpp \
-    $$prefix/src/Calculator.cpp \
+SOURCES += tst_delegate.cpp \
+    $$prefix/src/Delegate.cpp \
     $$prefix/src/Button.cpp \
     $$prefix/src/OperationsData.cpp \
     MockCalculationFrame.cpp \
+    MockCalculator.cpp \
     MockLogic.cpp
 
-HEADERS += $$prefix/include/Calculator.h \
+HEADERS += $$prefix/include/Delegate.h \
+    $$prefix/include/IDelegate.h \
     $$prefix/include/Button.h \
     $$prefix/include/OperationsData.h \
     $$prefix/include/CalculationFrame.h \
     $$prefix/include/ILogic.h \
     $$prefix/include/Logic.h \
+    $$prefix/include/Calculator.h \
     MockLogic.h
-

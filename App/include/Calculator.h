@@ -3,7 +3,7 @@
 #include <QLineEdit>
 
 #include "Button.h"
-#include "ILogic.h"
+#include "IDelegate.h"
 
 #include <memory>
 
@@ -17,25 +17,9 @@ public:
     QString getDisplayText() const;
 
 public slots:
-    void digitClicked(int);
-    void dotClicked();
-    void plusClicked();
-    void minusClicked();
-    void multClicked();
-    void divClicked();
-    void percentClicked();
-
-    void equalClicked();
-    void clearClicked();
-    void cancelClicked();
+    void receiveResult(const QString&);
 
 private:
-    std::pair<bool, double> calculate();
-    void checkError();
-    void clearAfterEqual();
-
     QLineEdit* m_display;
-    QString m_text;
-    std::unique_ptr<ILogic> m_logic;
-    bool m_isNeedToClear;
+    IDelegate* m_delegate;
 };
